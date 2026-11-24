@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="בונים טירה">
+<title>בונים טירה — מדריך הרכבה</title>
+<meta name="theme-color" content="#0d1520">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="scene"></canvas>
+
+  <aside id="panel">
+    <header>
+      <div class="count" id="count"></div>
+      <ol id="progress" aria-label="התקדמות"></ol>
+    </header>
+
+    <div class="card" id="card">
+      <div class="badge" id="badge">
+        <span class="bin-icon" aria-hidden="true"></span>
+        <span id="badge-text"></span>
+      </div>
+      <div class="partline" id="partline"></div>
+      <h1 id="title"></h1>
+      <p id="text"></p>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <nav>
+      <button id="prev" class="ghost" type="button"><span class="arrow">→</span>הקודם</button>
+      <button id="next" class="primary" type="button">הבא<span class="arrow">←</span></button>
+    </nav>
+  </aside>
+
+  <div id="tools">
+    <button id="replay" type="button" title="הצג שוב">↻ שוב</button>
+    <button id="explode" type="button" aria-pressed="false">תצוגה מפורקת</button>
+  </div>
+
+  <div id="attract" hidden>
+    <div class="attract-card">
+      <div class="attract-bins"><i class="red"></i><i class="blue"></i><i class="yellow"></i></div>
+      <h2>בונים טירה</h2>
+      <p>געו במסך כדי להתחיל</p>
+    </div>
+  </div>
+
+  <div id="loading">טוען…</div>
+  <div id="fps" hidden></div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

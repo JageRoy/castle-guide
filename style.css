@@ -1,0 +1,186 @@
+@font-face { font-family: Heebo; font-weight: 400; src: url(fonts/heebo-hebrew-400-normal.woff2) format('woff2'); unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+@font-face { font-family: Heebo; font-weight: 700; src: url(fonts/heebo-hebrew-700-normal.woff2) format('woff2'); unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+@font-face { font-family: Heebo; font-weight: 800; src: url(fonts/heebo-hebrew-800-normal.woff2) format('woff2'); unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+@font-face { font-family: Heebo; font-weight: 400; src: url(fonts/heebo-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2190-21FF, U+2000-206F; }
+@font-face { font-family: Heebo; font-weight: 700; src: url(fonts/heebo-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2190-21FF, U+2000-206F; }
+@font-face { font-family: Heebo; font-weight: 800; src: url(fonts/heebo-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2190-21FF, U+2000-206F; }
+
+:root {
+  --red: #D62828;
+  --blue: #1D5FD6;
+  --yellow: #F2C200;
+  --ink: #f4efe6;
+  --muted: #a9b3c2;
+  --panel: #101823;
+  --panel-edge: #26354a;
+  --gold: #f2c200;
+  --box: var(--muted);
+  --panel-w: clamp(260px, 33vw, 400px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #0d1520; }
+body {
+  font-family: Heebo, "Noto Sans Hebrew", Arial, sans-serif;
+  color: var(--ink);
+  user-select: none; -webkit-user-select: none;
+  touch-action: none;
+}
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+
+#app {
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(120% 90% at 30% 15%, #4f6f93 0%, #2a4262 38%, #13202f 75%, #0d1520 100%);
+}
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ---------------------------------------------------------------- panel */
+#panel {
+  position: absolute; top: 0; bottom: 0; right: 0;
+  width: var(--panel-w);
+  display: flex; flex-direction: column;
+  padding: clamp(14px, 2.6vh, 26px) clamp(14px, 2vw, 26px);
+  /* full-screen home-screen app: keep clear of the status bar and home indicator */
+  padding-top: calc(clamp(14px, 2.6vh, 26px) + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(clamp(14px, 2.6vh, 26px) + env(safe-area-inset-bottom, 0px));
+  padding-right: calc(clamp(14px, 2vw, 26px) + env(safe-area-inset-right, 0px));
+  background: linear-gradient(180deg, #121c29 0%, var(--panel) 100%);
+  border-inline-start: 1px solid var(--panel-edge);
+  box-shadow: -18px 0 40px rgba(0, 0, 0, .35);
+}
+
+header { display: flex; flex-direction: column; gap: 10px; }
+.count { font-size: clamp(13px, 1.6vw, 16px); color: var(--muted); letter-spacing: .02em; }
+.count b { color: var(--ink); font-weight: 700; }
+
+#progress { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; }
+#progress li {
+  flex: 1; height: 7px; border-radius: 4px;
+  background: #223047;
+  transition: background .3s, transform .3s;
+}
+#progress li.done { background: color-mix(in srgb, var(--c, #6d7c91) 55%, #223047); }
+#progress li.now  { background: var(--c, var(--ink)); transform: scaleY(1.5); }
+
+.card { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; min-height: 0; }
+
+.badge {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 16px 8px 14px;
+  border-radius: 999px;
+  background: var(--box);
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(15px, 1.9vw, 20px);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--box) 45%, transparent);
+  transition: background .35s, box-shadow .35s;
+}
+.badge.yellow { color: #2a2100; }
+.badge[hidden], .legend[hidden], #tools button[hidden] { display: none; }
+
+/* a little open bin, drawn in CSS so it is always the box colour */
+.bin-icon {
+  width: 22px; height: 16px; position: relative;
+  border: 3px solid currentColor; border-top: none; border-radius: 0 0 4px 4px;
+}
+.bin-icon::before {
+  content: ""; position: absolute; top: -3px; inset-inline: -6px; height: 3px;
+  background: currentColor; border-radius: 2px;
+}
+
+.partline { font-size: clamp(14px, 1.7vw, 18px); color: var(--muted); font-weight: 700; min-height: 1.2em; }
+h1 {
+  margin: 0; font-weight: 800; line-height: 1.05;
+  font-size: clamp(28px, 4vw, 46px);
+  letter-spacing: -.01em;
+}
+#text { margin: 0; font-size: clamp(16px, 2vw, 21px); line-height: 1.45; color: #dfe5ee; }
+
+.legend { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.legend button {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 12px;
+  background: #182435; border: 2px solid transparent;
+  text-align: start; font-size: clamp(14px, 1.7vw, 17px);
+  transition: border-color .2s, background .2s;
+}
+.legend button.on { border-color: var(--c); background: color-mix(in srgb, var(--c) 18%, #182435); }
+.legend .swatch { width: 26px; height: 20px; border-radius: 0 0 5px 5px; background: var(--c); flex: none; }
+.legend b { font-weight: 800; }
+.legend span.n { color: var(--muted); margin-inline-start: auto; font-weight: 700; }
+
+nav { display: flex; gap: 10px; }
+nav button {
+  height: clamp(54px, 10vh, 70px);
+  border-radius: 16px; border: none;
+  font-weight: 800; font-size: clamp(18px, 2.3vw, 24px);
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform .12s, opacity .2s, background .2s;
+}
+nav button:active { transform: scale(.96); }
+nav button:disabled { opacity: .28; pointer-events: none; }
+nav .primary { flex: 2; background: var(--gold); color: #1b1500; box-shadow: 0 8px 22px rgba(242, 194, 0, .28); }
+nav .ghost { flex: 1; background: #1c293b; color: var(--ink); }
+nav .arrow { font-size: 1.15em; line-height: 1; }
+
+/* ---------------------------------------------------------------- tools */
+#tools {
+  position: absolute;
+  top: calc(14px + env(safe-area-inset-top, 0px));
+  left: calc(14px + env(safe-area-inset-left, 0px));
+  display: flex; gap: 8px;
+}
+#tools button {
+  height: 44px; padding: 0 16px; border-radius: 12px;
+  background: rgba(16, 24, 35, .72); border: 1px solid #2c3d55;
+  font-weight: 700; font-size: 16px;
+}
+#tools button[aria-pressed="true"] { background: var(--ink); color: #101823; }
+#tools button:active { transform: scale(.96); }
+
+/* ---------------------------------------------------------------- attract */
+#attract {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: calc(7vh + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, transparent 50%, rgba(8, 13, 20, .7) 100%);
+}
+#attract[hidden] { display: none; }
+.attract-card { text-align: center; animation: breathe 2.6s ease-in-out infinite; }
+.attract-card h2 { margin: 6px 0 2px; font-size: clamp(34px, 6vw, 64px); font-weight: 800; }
+.attract-card p { margin: 0; font-size: clamp(18px, 2.6vw, 26px); color: #dfe5ee; }
+.attract-bins { display: flex; gap: 10px; justify-content: center; }
+.attract-bins i { width: 34px; height: 24px; border-radius: 0 0 7px 7px; display: block; }
+.attract-bins .red { background: var(--red); }
+.attract-bins .blue { background: var(--blue); }
+.attract-bins .yellow { background: var(--yellow); }
+@keyframes breathe { 50% { transform: translateY(-6px); opacity: .85; } }
+
+#app.attract #panel, #app.attract #tools { opacity: 0; pointer-events: none; }
+#panel, #tools { transition: opacity .5s; }
+
+#loading {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 28px; font-weight: 800; background: #0d1520;
+  transition: opacity .5s;
+}
+#loading.gone { opacity: 0; pointer-events: none; }
+
+#fps {
+  position: absolute; bottom: 8px; left: 8px; padding: 4px 8px; border-radius: 6px;
+  background: rgba(0, 0, 0, .6); font: 13px/1.2 monospace; direction: ltr;
+}
+
+/* official 7" Pi display (800 x 480) and other short screens */
+@media (max-height: 520px) {
+  .card { gap: 6px; }
+  h1 { font-size: 28px; }
+  #text { font-size: 15px; line-height: 1.35; }
+  .legend { gap: 5px; margin-top: 2px; }
+  .legend button { padding: 6px 10px; font-size: 13px; border-radius: 10px; }
+  .legend .swatch { width: 20px; height: 15px; }
+  nav button { height: 52px; font-size: 19px; }
+  .badge { font-size: 15px; padding: 6px 12px; }
+}
